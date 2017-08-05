@@ -1,0 +1,39 @@
+{
+	"name": "grand-media/doctrine-logging",
+	"description": "GrandMedia Doctrine Logging",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Grand Media s.r.o.",
+			"email": "vesely@grandmedia.cz",
+			"homepage": "https://www.grandmedia.cz"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/GrandMedia/Menus/issues"
+	},
+	"require": {
+		"php": ">=7.1",
+		"beberlei/assert": "^2.7",
+		"consistence/consistence": "^1.0",
+		"kdyby/doctrine": "^3.2",
+		"kdyby/events": "^3.1",
+		"nette/security": "^2.4"
+	},
+	"require-dev": {
+		"grand-media/coding-standard": "^1.0",
+		"nette/tester": "~1.7",
+		"nette/bootstrap": "^2.4",
+		"tracy/tracy": "^2.4"
+	},
+	"autoload": {
+		"psr-4": {
+			"GrandMedia\\DoctrineLogging\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"GrandMediaTests\\": "tests/"
+		}
+	}
+}

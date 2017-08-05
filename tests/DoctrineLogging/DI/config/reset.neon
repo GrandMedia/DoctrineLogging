@@ -1,0 +1,17 @@
+php:
+	date.timezone: Europe/Prague
+
+extensions:
+	- GrandMedia\DoctrineLogging\DI\DoctrineLoggingExtension
+	- Kdyby\Annotations\DI\AnnotationsExtension
+	- Kdyby\Console\DI\ConsoleExtension
+	- Kdyby\Events\DI\EventsExtension
+	doctrine: Kdyby\Doctrine\DI\OrmExtension
+
+services:
+	security.userStorage: GrandMediaTests\DoctrineLogging\Mocks\UserStorageMock
+	- GrandMediaTests\DoctrineLogging\Mocks\DateTimeProviderMock
+
+doctrine:
+	driver: pdo_sqlite
+	memory: true

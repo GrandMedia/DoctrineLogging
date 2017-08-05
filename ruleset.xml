@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<ruleset name="GrandMedia/DoctrineLogging">
+	<rule ref="vendor/grand-media/coding-standard/GrandMediaCodingStandard/ruleset.xml"/>
+</ruleset>
