@@ -23,7 +23,7 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension impleme
 	public function getEntityMappings(): array
 	{
 		return [
-			'Grand\DoctrineLogging' => __DIR__ . '/..',
+			'GrandMedia\DoctrineLogging' => __DIR__ . '/..',
 		];
 	}
 
