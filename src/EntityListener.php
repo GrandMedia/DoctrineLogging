@@ -106,6 +106,10 @@ final class EntityListener implements \Kdyby\Events\Subscriber
 
 		$message = [];
 		foreach ($uow->getEntityChangeSet($entity) as $property => $changeSet) {
+			if (isset($classMetadata->embeddedClasses[$property])) {
+				continue;
+			}
+
 			for ($i = 0, $s = \count($changeSet); $i < $s; $i++) {
 				$change = $changeSet[$i];
 
@@ -118,7 +122,7 @@ final class EntityListener implements \Kdyby\Events\Subscriber
 				$changeSet[$i] = $change;
 			}
 
-			if ($changeSet[0] !== $changeSet[1]) {
+			if ((string) $changeSet[0] !== (string) $changeSet[1]) {
 				$message[] = \sprintf(
 					'property "%s" changed from "%s" to "%s"',
 					$property,
