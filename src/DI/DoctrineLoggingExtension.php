@@ -2,8 +2,10 @@
 
 namespace GrandMedia\DoctrineLogging\DI;
 
+use Doctrine\ORM\Events;
 use GrandMedia\DoctrineLogging\EntityListener;
-use Kdyby\Events\DI\EventsExtension;
+use Kdyby\Doctrine\EntityManager;
+use Nette\PhpGenerator\ClassType;
 
 final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension implements \Kdyby\Doctrine\DI\IEntityProvider
 {
@@ -13,8 +15,27 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension impleme
 		$containerBuilder = $this->getContainerBuilder();
 
 		$containerBuilder->addDefinition($this->prefix('entityListener'))
-			->setClass(EntityListener::class)
-			->addTag(EventsExtension::TAG_SUBSCRIBER);
+			->setClass(EntityListener::class);
+	}
+
+	public function afterCompile(ClassType $class): void
+	{
+		$builder = $this->getContainerBuilder();
+
+		$class->getMethod('initialize')
+			->addBody(
+				'$this->getService(?)->getEventManager()->addEventListener(?, $this->getService(?));',
+				[
+					$builder->getByType(EntityManager::class),
+					[
+						Events::postPersist,
+						Events::postUpdate,
+						Events::preRemove,
+						Events::postFlush,
+					],
+					$builder->getByType(EntityListener::class),
+				]
+			);
 	}
 
 	/**

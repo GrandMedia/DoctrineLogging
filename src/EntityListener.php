@@ -5,11 +5,10 @@ namespace GrandMedia\DoctrineLogging;
 use Consistence\Enum\Enum;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\Events;
 use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
 
-final class EntityListener implements \Kdyby\Events\Subscriber
+final class EntityListener
 {
 
 	/** @var \Nette\Security\IUserStorage */
@@ -66,19 +65,6 @@ final class EntityListener implements \Kdyby\Events\Subscriber
 			$this->logsToPersist = [];
 			$em->flush();
 		}
-	}
-
-	/**
-	 * @return string[]
-	 */
-	public function getSubscribedEvents(): array
-	{
-		return [
-			Events::postPersist,
-			Events::postUpdate,
-			Events::preRemove,
-			Events::postFlush,
-		];
 	}
 
 	private function logAction(LoggableEntity $entity, Action $action, string $message): void
