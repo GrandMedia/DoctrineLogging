@@ -3,6 +3,7 @@
 namespace GrandMedia\DoctrineLogging;
 
 use Consistence\Enum\Enum;
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Nette\Security\IIdentity;
@@ -96,17 +97,23 @@ final class EntityListener
 				continue;
 			}
 
-			for ($i = 0, $s = \count($changeSet); $i < $s; $i++) {
-				$change = $changeSet[$i];
-
+			/** @var mixed[] $changeSet */
+			foreach ($changeSet as &$change) {
 				if ($change instanceof \DateTimeInterface) {
 					$change = $change->format('Y-m-d H:i:s');
 				} elseif ($change instanceof Enum) {
 					$change = $change->getValue();
+				} elseif (
+					\is_object($change) &&
+					!$em->getMetadataFactory()->isTransient(ClassUtils::getClass($change))
+				) {
+					$change = \implode(
+						',',
+						$em->getClassMetadata(ClassUtils::getClass($change))->getIdentifierValues($change)
+					);
 				}
-
-				$changeSet[$i] = $change;
 			}
+			unset($change);
 
 			if ((string) $changeSet[0] !== (string) $changeSet[1]) {
 				$message[] = \sprintf(
