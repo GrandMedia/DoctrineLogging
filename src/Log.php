@@ -29,12 +29,6 @@ class Log
 	 * @ORM\Column(type="string")
 	 * @var string
 	 */
-	private $userName;
-
-	/**
-	 * @ORM\Column(type="string")
-	 * @var string
-	 */
 	private $entityClass;
 
 	/**
@@ -63,7 +57,6 @@ class Log
 
 	public function __construct(
 		string $userId,
-		string $userName,
 		string $entityClass,
 		string $entityId,
 		Action $action,
@@ -76,7 +69,6 @@ class Log
 		Assertion::notBlank($message);
 
 		$this->userId = $userId;
-		$this->userName = $userName;
 		$this->entityClass = $entityClass;
 		$this->entityId = $entityId;
 		$this->action = $action->getValue();
@@ -101,11 +93,6 @@ class Log
 	public function getUserId(): string
 	{
 		return $this->userId;
-	}
-
-	public function getUserName(): string
-	{
-		return $this->userName;
 	}
 
 	public function getEntityClass(): string

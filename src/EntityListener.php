@@ -71,7 +71,6 @@ final class EntityListener
 
 		$this->logsToPersist[] = new Log(
 			$identity instanceof IIdentity ? (string) $identity->getId() : '',
-			$identity instanceof IdentityEntity ? $identity->getLogName() : '',
 			$this->getEntityClass($entity),
 			$this->getEntityId($entity, $eventArgs->getEntityManager()),
 			$action,
