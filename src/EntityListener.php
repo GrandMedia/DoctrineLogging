@@ -2,7 +2,6 @@
 
 namespace GrandMedia\DoctrineLogging;
 
-use Consistence\Enum\Enum;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -21,6 +20,9 @@ final class EntityListener
 
 	/** @var \GrandMedia\DoctrineLogging\Log[] */
 	private $logsToPersist = [];
+
+	/** @var \GrandMedia\DoctrineLogging\ValueFormatter[] */
+	private $valueFormatters = [];
 
 	public function __construct(IUserStorage $userStorage, DateTimeProvider $dateTimeProvider)
 	{
@@ -60,6 +62,11 @@ final class EntityListener
 		}
 	}
 
+	public function addValueFormatter(ValueFormatter $formatter): void
+	{
+		$this->valueFormatters[] = $formatter;
+	}
+
 	private function logAction(LifecycleEventArgs $eventArgs, Action $action, string $message): void
 	{
 		$identity = $this->userStorage->getIdentity();
@@ -95,18 +102,19 @@ final class EntityListener
 
 			/** @var mixed[] $changeSet */
 			foreach ($changeSet as &$change) {
-				if ($change instanceof \DateTimeInterface) {
-					$change = $change->format('Y-m-d H:i:s');
-				} elseif ($change instanceof Enum) {
-					$change = $change->getValue();
-				} elseif (
+				if (
 					\is_object($change) &&
 					!$em->getMetadataFactory()->isTransient(ClassUtils::getClass($change))
 				) {
-					$change = \implode(
-						',',
-						$em->getClassMetadata(ClassUtils::getClass($change))->getIdentifierValues($change)
-					);
+					$change = $this->getEntityId($change, $em);
+					continue;
+				}
+
+				foreach ($this->valueFormatters as $valueFormatter) {
+					if ($valueFormatter->support($change)) {
+						$change = $valueFormatter->format($change);
+						continue;
+					}
 				}
 			}
 			unset($change);
@@ -129,7 +137,7 @@ final class EntityListener
 	 */
 	private function getEntityId($entity, EntityManager $em): string
 	{
-		return \implode(',', $em->getClassMetadata(\get_class($entity))->getIdentifier());
+		return \implode(',', $em->getClassMetadata(ClassUtils::getClass($entity))->getIdentifierValues($entity));
 	}
 
 	/**
