@@ -4,6 +4,7 @@ namespace GrandMedia\DoctrineLogging;
 
 use Consistence\Enum\Enum;
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Nette\Security\IIdentity;
@@ -29,29 +30,20 @@ final class EntityListener
 
 	public function postPersist(LifecycleEventArgs $eventArgs): void
 	{
-		$entity = $eventArgs->getEntity();
-		if ($entity instanceof LoggableEntity) {
-			$this->logAction($entity, Action::get(Action::CREATE), $this->createMessage($eventArgs));
-		}
+		$this->logAction($eventArgs, Action::get(Action::CREATE), $this->createMessage($eventArgs));
 	}
 
 	public function postUpdate(LifecycleEventArgs $eventArgs): void
 	{
-		$entity = $eventArgs->getEntity();
-		if ($entity instanceof LoggableEntity) {
-			$message = $this->createMessage($eventArgs);
-			if ($message !== '') {
-				$this->logAction($entity, Action::get(Action::UPDATE), $message);
-			}
+		$message = $this->createMessage($eventArgs);
+		if ($message !== '') {
+			$this->logAction($eventArgs, Action::get(Action::UPDATE), $message);
 		}
 	}
 
 	public function preRemove(LifecycleEventArgs $eventArgs): void
 	{
-		$entity = $eventArgs->getEntity();
-		if ($entity instanceof LoggableEntity) {
-			$this->logAction($entity, Action::get(Action::DELETE), 'success');
-		}
+		$this->logAction($eventArgs, Action::get(Action::DELETE), 'success');
 	}
 
 	public function postFlush(PostFlushEventArgs $eventArgs): void
@@ -68,15 +60,20 @@ final class EntityListener
 		}
 	}
 
-	private function logAction(LoggableEntity $entity, Action $action, string $message): void
+	private function logAction(LifecycleEventArgs $eventArgs, Action $action, string $message): void
 	{
 		$identity = $this->userStorage->getIdentity();
+		$entity = $eventArgs->getEntity();
+
+		if ($entity instanceof Log) {
+			return;
+		}
 
 		$this->logsToPersist[] = new Log(
 			$identity instanceof IIdentity ? (string) $identity->getId() : '',
 			$identity instanceof IdentityEntity ? $identity->getLogName() : '',
 			$this->getEntityClass($entity),
-			$entity->getLogId(),
+			$this->getEntityId($entity, $eventArgs->getEntityManager()),
 			$action,
 			$message,
 			$this->dateTimeProvider->getDateTime()
@@ -128,7 +125,18 @@ final class EntityListener
 		return \implode('\n', $message);
 	}
 
-	private function getEntityClass(LoggableEntity $entity): string
+	/**
+	 * @param object $entity
+	 */
+	private function getEntityId($entity, EntityManager $em): string
+	{
+		return \implode(',', $em->getClassMetadata(\get_class($entity))->getIdentifier());
+	}
+
+	/**
+	 * @param object $entity
+	 */
+	private function getEntityClass($entity): string
 	{
 		$parts = \explode('\\', \get_class($entity));
 
