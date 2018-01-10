@@ -4,6 +4,7 @@ namespace GrandMedia\DoctrineLogging\DI;
 
 use Doctrine\ORM\Events;
 use GrandMedia\DoctrineLogging\EntityListener;
+use GrandMedia\DoctrineLogging\Formatters\ArrayFormatter;
 use GrandMedia\DoctrineLogging\Formatters\DateTimeFormatter;
 use GrandMedia\DoctrineLogging\Formatters\EnumFormatter;
 use Kdyby\Doctrine\EntityManager;
@@ -17,6 +18,7 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension impleme
 		'formatters' => [
 			'datetime' => true,
 			'enum' => true,
+			'array' => true,
 		],
 	];
 
@@ -34,9 +36,14 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension impleme
 			$entityLilstenerDefinition->addSetup('addValueFormatter', [$this->prefix('@dateTimeFormatter')]);
 		}
 		if ($config['formatters']['enum']) {
-			$containerBuilder->addDefinition($this->prefix('enumTimeFormatter'))
+			$containerBuilder->addDefinition($this->prefix('enumFormatter'))
 				->setType(EnumFormatter::class);
-			$entityLilstenerDefinition->addSetup('addValueFormatter', [$this->prefix('@enumTimeFormatter')]);
+			$entityLilstenerDefinition->addSetup('addValueFormatter', [$this->prefix('@enumFormatter')]);
+		}
+		if ($config['formatters']['array']) {
+			$containerBuilder->addDefinition($this->prefix('arrayFormatter'))
+				->setType(ArrayFormatter::class);
+			$entityLilstenerDefinition->addSetup('addValueFormatter', [$this->prefix('@arrayFormatter')]);
 		}
 	}
 
