@@ -27,23 +27,23 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension impleme
 		$config = $this->validateConfig($this->defaults);
 		$containerBuilder = $this->getContainerBuilder();
 
-		$entityLilstenerDefinition = $containerBuilder->addDefinition($this->prefix('entityListener'))
+		$entityListenerDefinition = $containerBuilder->addDefinition($this->prefix('entityListener'))
 			->setType(EntityListener::class);
 
 		if ($config['formatters']['datetime']) {
 			$containerBuilder->addDefinition($this->prefix('dateTimeFormatter'))
 				->setType(DateTimeFormatter::class);
-			$entityLilstenerDefinition->addSetup('addValueFormatter', [$this->prefix('@dateTimeFormatter')]);
+			$entityListenerDefinition->addSetup('addValueFormatter', [$this->prefix('@dateTimeFormatter')]);
 		}
 		if ($config['formatters']['enum']) {
 			$containerBuilder->addDefinition($this->prefix('enumFormatter'))
 				->setType(EnumFormatter::class);
-			$entityLilstenerDefinition->addSetup('addValueFormatter', [$this->prefix('@enumFormatter')]);
+			$entityListenerDefinition->addSetup('addValueFormatter', [$this->prefix('@enumFormatter')]);
 		}
 		if ($config['formatters']['array']) {
 			$containerBuilder->addDefinition($this->prefix('arrayFormatter'))
 				->setType(ArrayFormatter::class);
-			$entityLilstenerDefinition->addSetup('addValueFormatter', [$this->prefix('@arrayFormatter')]);
+			$entityListenerDefinition->addSetup('addValueFormatter', [$this->prefix('@arrayFormatter')]);
 		}
 	}
 
