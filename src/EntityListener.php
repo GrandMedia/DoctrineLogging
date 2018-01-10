@@ -7,13 +7,12 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Nette\Security\IIdentity;
-use Nette\Security\IUserStorage;
 
 final class EntityListener
 {
 
-	/** @var \Nette\Security\IUserStorage */
-	private $userStorage;
+	/** @var \GrandMedia\DoctrineLogging\IdentityProvider */
+	private $identityProvider;
 
 	/** @var \GrandMedia\DoctrineLogging\DateTimeProvider */
 	private $dateTimeProvider;
@@ -24,9 +23,9 @@ final class EntityListener
 	/** @var \GrandMedia\DoctrineLogging\ValueFormatter[] */
 	private $valueFormatters = [];
 
-	public function __construct(IUserStorage $userStorage, DateTimeProvider $dateTimeProvider)
+	public function __construct(IdentityProvider $identityProvider, DateTimeProvider $dateTimeProvider)
 	{
-		$this->userStorage = $userStorage;
+		$this->identityProvider = $identityProvider;
 		$this->dateTimeProvider = $dateTimeProvider;
 	}
 
@@ -69,7 +68,7 @@ final class EntityListener
 
 	private function logAction(LifecycleEventArgs $eventArgs, Action $action, string $message): void
 	{
-		$identity = $this->userStorage->getIdentity();
+		$identity = $this->identityProvider->getIdentity();
 		$entity = $eventArgs->getEntity();
 
 		if ($entity instanceof Log) {

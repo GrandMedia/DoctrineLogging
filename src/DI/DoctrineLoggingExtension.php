@@ -7,6 +7,7 @@ use GrandMedia\DoctrineLogging\EntityListener;
 use GrandMedia\DoctrineLogging\Formatters\ArrayFormatter;
 use GrandMedia\DoctrineLogging\Formatters\DateTimeFormatter;
 use GrandMedia\DoctrineLogging\Formatters\EnumFormatter;
+use GrandMedia\DoctrineLogging\Security\BasicIdentityProvider;
 use Kdyby\Doctrine\EntityManager;
 use Nette\PhpGenerator\ClassType;
 
@@ -26,6 +27,9 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension impleme
 	{
 		$config = $this->validateConfig($this->defaults);
 		$containerBuilder = $this->getContainerBuilder();
+
+		$containerBuilder->addDefinition($this->prefix('basicIdentityProvider'))
+			->setType(BasicIdentityProvider::class);
 
 		$entityListenerDefinition = $containerBuilder->addDefinition($this->prefix('entityListener'))
 			->setType(EntityListener::class);
