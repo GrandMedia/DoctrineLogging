@@ -50,8 +50,8 @@ class Log
 	private $message;
 
 	/**
-	 * @ORM\Column(type="datetime")
-	 * @var \DateTime
+	 * @ORM\Column(type="datetime_immutable")
+	 * @var \DateTimeImmutable
 	 */
 	private $createdAt;
 
@@ -61,7 +61,7 @@ class Log
 		string $entityId,
 		Action $action,
 		string $message,
-		\DateTimeInterface $createdAt
+		\DateTimeImmutable $createdAt
 	)
 	{
 		Assertion::notBlank($entityClass);
@@ -73,11 +73,7 @@ class Log
 		$this->entityId = $entityId;
 		$this->action = $action->getValue();
 		$this->message = $message;
-		$this->createdAt = \DateTime::createFromFormat(
-			\DATE_ATOM,
-			$createdAt->format(\DATE_ATOM),
-			$createdAt->getTimezone()
-		);
+		$this->createdAt = $createdAt;
 	}
 
 	public function getId(): int
@@ -87,7 +83,7 @@ class Log
 
 	public function getCreatedAt(): \DateTimeImmutable
 	{
-		return \DateTimeImmutable::createFromMutable($this->createdAt);
+		return $this->createdAt;
 	}
 
 	public function getUserId(): string

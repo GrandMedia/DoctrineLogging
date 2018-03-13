@@ -16,19 +16,19 @@ final class LogTest extends \Tester\TestCase
 	/** @throws \Assert\InvalidArgumentException */
 	public function testBlankEntityClass(): void
 	{
-		new Log('userId', '', 'entityId', Action::get(Action::CREATE), 'message', new \DateTime());
+		new Log('userId', '', 'entityId', Action::get(Action::CREATE), 'message', new \DateTimeImmutable());
 	}
 
 	/** @throws \Assert\InvalidArgumentException */
 	public function testBlankEntityId(): void
 	{
-		new Log('userId', 'entityClass', '', Action::get(Action::CREATE), 'message', new \DateTime());
+		new Log('userId', 'entityClass', '', Action::get(Action::CREATE), 'message', new \DateTimeImmutable());
 	}
 
 	/** @throws \Assert\InvalidArgumentException */
 	public function testBlankMessage(): void
 	{
-		new Log('userId', 'entityClass', 'entityId', Action::get(Action::CREATE), '', new \DateTime());
+		new Log('userId', 'entityClass', 'entityId', Action::get(Action::CREATE), '', new \DateTimeImmutable());
 	}
 
 }

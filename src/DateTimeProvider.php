@@ -5,6 +5,6 @@ namespace GrandMedia\DoctrineLogging;
 interface DateTimeProvider
 {
 
-	public function getDateTime(): \DateTimeInterface;
+	public function getDateTime(): \DateTimeImmutable;
 
 }
