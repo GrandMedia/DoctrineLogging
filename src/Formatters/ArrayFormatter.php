@@ -2,6 +2,8 @@
 
 namespace GrandMedia\DoctrineLogging\Formatters;
 
+use GrandMedia\DoctrineLogging\Formatters\Exceptions\UnsupportedValue;
+
 final class ArrayFormatter implements \GrandMedia\DoctrineLogging\ValueFormatter
 {
 
@@ -22,7 +24,7 @@ final class ArrayFormatter implements \GrandMedia\DoctrineLogging\ValueFormatter
 			return \implode(', ', $value);
 		}
 
-		throw new UnsupportedValueException();
+		throw new UnsupportedValue();
 	}
 
 }

@@ -122,8 +122,8 @@ final class EntityListener
 				$message[] = \sprintf(
 					'property "%s" changed from "%s" to "%s"',
 					$property,
-					!\is_array($changeSet[0]) ? \trim(\preg_replace('/\s\s+/', ' ', $changeSet[0])) : 'an array',
-					!\is_array($changeSet[1]) ? \trim(\preg_replace('/\s\s+/', ' ', $changeSet[1])) : 'an array'
+					!\is_array($changeSet[0]) ? \trim((string) \preg_replace('/\s\s+/', ' ', $changeSet[0])) : 'an array',
+					!\is_array($changeSet[1]) ? \trim((string) \preg_replace('/\s\s+/', ' ', $changeSet[1])) : 'an array'
 				);
 			}
 		}

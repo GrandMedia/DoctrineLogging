@@ -3,6 +3,7 @@
 namespace GrandMedia\DoctrineLogging\Formatters;
 
 use Consistence\Enum\Enum;
+use GrandMedia\DoctrineLogging\Formatters\Exceptions\UnsupportedValue;
 
 final class EnumFormatter implements \GrandMedia\DoctrineLogging\ValueFormatter
 {
@@ -24,7 +25,7 @@ final class EnumFormatter implements \GrandMedia\DoctrineLogging\ValueFormatter
 			return (string) $value->getValue();
 		}
 
-		throw new UnsupportedValueException();
+		throw new UnsupportedValue();
 	}
 
 }

@@ -2,6 +2,8 @@
 
 namespace GrandMedia\DoctrineLogging\Formatters;
 
+use GrandMedia\DoctrineLogging\Formatters\Exceptions\UnsupportedValue;
+
 final class DateTimeFormatter implements \GrandMedia\DoctrineLogging\ValueFormatter
 {
 
@@ -22,7 +24,7 @@ final class DateTimeFormatter implements \GrandMedia\DoctrineLogging\ValueFormat
 			return $value->format('Y-m-d H:i:s');
 		}
 
-		throw new UnsupportedValueException();
+		throw new UnsupportedValue();
 	}
 
 }
