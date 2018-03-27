@@ -76,7 +76,7 @@ final class EntityListener
 		}
 
 		$this->logsToPersist[] = new Log(
-			$identity instanceof IIdentity ? (string) $identity->getId() : '',
+			$identity instanceof IIdentity ? $this->formatValue($identity->getId()) : '',
 			$this->getEntityClass($entity),
 			$this->getEntityId($entity, $eventArgs->getEntityManager()),
 			$action,
@@ -109,12 +109,7 @@ final class EntityListener
 					continue;
 				}
 
-				foreach ($this->valueFormatters as $valueFormatter) {
-					if ($valueFormatter->support($change)) {
-						$change = $valueFormatter->format($change);
-						continue;
-					}
-				}
+				$change = $this->formatValue($change);
 			}
 			unset($change);
 
@@ -136,7 +131,14 @@ final class EntityListener
 	 */
 	private function getEntityId($entity, EntityManager $em): string
 	{
-		return \implode(',', $em->getClassMetadata(ClassUtils::getClass($entity))->getIdentifierValues($entity));
+		$identifierValues = $em->getClassMetadata(ClassUtils::getClass($entity))->getIdentifierValues($entity);
+
+		foreach ($identifierValues as &$identifierValue) {
+			$identifierValue = $this->formatValue($identifierValue);
+		}
+		unset($identifierValue);
+
+		return \implode(',', $identifierValues);
 	}
 
 	/**
@@ -147,6 +149,20 @@ final class EntityListener
 		$parts = \explode('\\', \get_class($entity));
 
 		return $parts[\count($parts) - 1];
+	}
+
+	/**
+	 * @param mixed $value
+	 */
+	private function formatValue($value): string
+	{
+		foreach ($this->valueFormatters as $valueFormatter) {
+			if ($valueFormatter->support($value)) {
+				return $valueFormatter->format($value);
+			}
+		}
+
+		return (string) $value;
 	}
 
 }
