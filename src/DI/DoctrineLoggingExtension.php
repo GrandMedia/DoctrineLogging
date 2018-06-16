@@ -2,10 +2,8 @@
 
 namespace GrandMedia\DoctrineLogging\DI;
 
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use GrandMedia\DoctrineLogging\EntityListener;
 use GrandMedia\DoctrineLogging\Formatters\ArrayFormatter;
 use GrandMedia\DoctrineLogging\Formatters\DateTimeFormatter;
@@ -51,22 +49,6 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension
 				->setType(ArrayFormatter::class);
 			$entityListenerDefinition->addSetup('addValueFormatter', [$this->prefix('@arrayFormatter')]);
 		}
-	}
-
-	public function beforeCompile(): void
-	{
-		$containerBuilder = $this->getContainerBuilder();
-
-		/** @var \Nette\DI\ServiceDefinition $mappingDriverDefinition */
-		$mappingDriverDefinition = \array_values($containerBuilder->findByType(MappingDriverChain::class))[0];
-		$mappingDriverDefinition
-			->addSetup(
-				'addDriver',
-				[
-					'nestedDriver' => AnnotationDriver::create(__DIR__ . '/..'),
-					'namespace' => 'GrandMedia\DoctrineLogging',
-				]
-			);
 	}
 
 	public function afterCompile(ClassType $class): void

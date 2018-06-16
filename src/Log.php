@@ -3,54 +3,41 @@
 namespace GrandMedia\DoctrineLogging;
 
 use Assert\Assertion;
-use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- */
 class Log
 {
 
 	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
 	private $id;
 
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	private $userId;
 
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	private $entityClass;
 
 	/**
-	 * @ORM\Column(type="string")
 	 * @var string
 	 */
 	private $entityId;
 
 	/**
-	 * @ORM\Column(type="integer")
 	 * @var int
 	 */
 	private $action;
 
 	/**
-	 * @ORM\Column(type="text")
 	 * @var string
 	 */
 	private $message;
 
 	/**
-	 * @ORM\Column(type="datetime_immutable")
 	 * @var \DateTimeImmutable
 	 */
 	private $createdAt;
