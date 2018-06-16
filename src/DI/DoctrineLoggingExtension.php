@@ -2,16 +2,18 @@
 
 namespace GrandMedia\DoctrineLogging\DI;
 
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use GrandMedia\DoctrineLogging\EntityListener;
 use GrandMedia\DoctrineLogging\Formatters\ArrayFormatter;
 use GrandMedia\DoctrineLogging\Formatters\DateTimeFormatter;
 use GrandMedia\DoctrineLogging\Formatters\EnumFormatter;
 use GrandMedia\DoctrineLogging\Security\BasicIdentityProvider;
-use Kdyby\Doctrine\EntityManager;
 use Nette\PhpGenerator\ClassType;
 
-final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension implements \Kdyby\Doctrine\DI\IEntityProvider
+final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension
 {
 
 	/** @var mixed[] */
@@ -51,6 +53,22 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension impleme
 		}
 	}
 
+	public function beforeCompile(): void
+	{
+		$containerBuilder = $this->getContainerBuilder();
+
+		/** @var \Nette\DI\ServiceDefinition $mappingDriverDefinition */
+		$mappingDriverDefinition = \array_values($containerBuilder->findByType(MappingDriverChain::class))[0];
+		$mappingDriverDefinition
+			->addSetup(
+				'addDriver',
+				[
+					'nestedDriver' => AnnotationDriver::create(__DIR__ . '/..'),
+					'namespace' => 'GrandMedia\DoctrineLogging',
+				]
+			);
+	}
+
 	public function afterCompile(ClassType $class): void
 	{
 		$builder = $this->getContainerBuilder();
@@ -69,16 +87,6 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension impleme
 					$builder->getByType(EntityListener::class),
 				]
 			);
-	}
-
-	/**
-	 * @return string[]
-	 */
-	public function getEntityMappings(): array
-	{
-		return [
-			'GrandMedia\DoctrineLogging' => __DIR__ . '/..',
-		];
 	}
 
 }

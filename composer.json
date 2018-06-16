@@ -16,14 +16,16 @@
 		"php": ">=7.1",
 		"beberlei/assert": "^2.7",
 		"consistence/consistence": "^1.0",
-		"kdyby/doctrine": "@dev",
+		"doctrine/orm": "^2.6",
+		"nette/di": "^2.4",
 		"nette/security": "^2.4"
 	},
 	"require-dev": {
 		"grand-media/coding-standard": "^2.0",
-		"nette/tester": "^2.0",
+		"kdyby/doctrine": "@dev",
 		"nette/bootstrap": "^2.4",
-		"nette/reflection": "^2.4"
+		"nette/reflection": "^2.4",
+		"nette/tester": "^2.0"
 	},
 	"autoload": {
 		"psr-4": {
