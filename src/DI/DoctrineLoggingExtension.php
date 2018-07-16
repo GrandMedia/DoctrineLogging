@@ -4,6 +4,7 @@ namespace GrandMedia\DoctrineLogging\DI;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Events;
+use GrandMedia\DoctrineLogging\DateTime\ConstantProvider;
 use GrandMedia\DoctrineLogging\EntityListener;
 use GrandMedia\DoctrineLogging\Formatters\ArrayFormatter;
 use GrandMedia\DoctrineLogging\Formatters\DateTimeFormatter;
@@ -28,8 +29,11 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension
 		$config = $this->validateConfig($this->defaults);
 		$containerBuilder = $this->getContainerBuilder();
 
-		$containerBuilder->addDefinition($this->prefix('basicIdentityProvider'))
+		$containerBuilder->addDefinition($this->prefix('identityProvider'))
 			->setType(BasicIdentityProvider::class);
+
+		$containerBuilder->addDefinition($this->prefix('dateTimeProvider'))
+			->setType(ConstantProvider::class);
 
 		$entityListenerDefinition = $containerBuilder->addDefinition($this->prefix('entityListener'))
 			->setType(EntityListener::class);

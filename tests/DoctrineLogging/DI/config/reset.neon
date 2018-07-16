@@ -9,7 +9,6 @@ extensions:
 
 services:
 	security.userStorage: GrandMediaTests\DoctrineLogging\Mocks\UserStorageMock
-	- GrandMediaTests\DoctrineLogging\Mocks\DateTimeProviderMock
 
 doctrine:
 	driver: pdo_sqlite
