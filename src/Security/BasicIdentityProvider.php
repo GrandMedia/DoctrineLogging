@@ -5,7 +5,7 @@ namespace GrandMedia\DoctrineLogging\Security;
 use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
 
-final class BasicIdentityProvider implements \GrandMedia\DoctrineLogging\IdentityProvider
+final class BasicIdentityProvider implements \GrandMedia\DoctrineLogging\Security\IdentityProvider
 {
 
 	/** @var \Nette\Security\IUserStorage */

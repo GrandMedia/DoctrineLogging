@@ -5,7 +5,7 @@ namespace GrandMedia\DoctrineLogging\Formatters;
 use Consistence\Enum\Enum;
 use GrandMedia\DoctrineLogging\Formatters\Exceptions\UnsupportedValue;
 
-final class EnumFormatter implements \GrandMedia\DoctrineLogging\ValueFormatter
+final class EnumFormatter implements \GrandMedia\DoctrineLogging\Formatters\Formatter
 {
 
 	/**

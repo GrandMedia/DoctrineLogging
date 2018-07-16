@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace GrandMedia\DoctrineLogging;
+namespace GrandMedia\DoctrineLogging\DateTime;
 
 interface DateTimeProvider
 {

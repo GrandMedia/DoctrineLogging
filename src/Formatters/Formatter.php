@@ -1,8 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace GrandMedia\DoctrineLogging;
+namespace GrandMedia\DoctrineLogging\Formatters;
 
-interface ValueFormatter
+interface Formatter
 {
 
 	/**

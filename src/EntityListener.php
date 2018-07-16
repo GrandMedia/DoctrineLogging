@@ -6,21 +6,24 @@ use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use GrandMedia\DoctrineLogging\DateTime\DateTimeProvider;
+use GrandMedia\DoctrineLogging\Formatters\Formatter;
+use GrandMedia\DoctrineLogging\Security\IdentityProvider;
 use Nette\Security\IIdentity;
 
 final class EntityListener
 {
 
-	/** @var \GrandMedia\DoctrineLogging\IdentityProvider */
+	/** @var \GrandMedia\DoctrineLogging\Security\IdentityProvider */
 	private $identityProvider;
 
-	/** @var \GrandMedia\DoctrineLogging\DateTimeProvider */
+	/** @var \GrandMedia\DoctrineLogging\DateTime\DateTimeProvider */
 	private $dateTimeProvider;
 
 	/** @var \GrandMedia\DoctrineLogging\Log[] */
 	private $logsToPersist = [];
 
-	/** @var \GrandMedia\DoctrineLogging\ValueFormatter[] */
+	/** @var \GrandMedia\DoctrineLogging\Formatters\Formatter[] */
 	private $valueFormatters = [];
 
 	public function __construct(IdentityProvider $identityProvider, DateTimeProvider $dateTimeProvider)
@@ -61,7 +64,7 @@ final class EntityListener
 		}
 	}
 
-	public function addValueFormatter(ValueFormatter $formatter): void
+	public function addValueFormatter(Formatter $formatter): void
 	{
 		$this->valueFormatters[] = $formatter;
 	}

@@ -4,7 +4,7 @@ namespace GrandMedia\DoctrineLogging\Formatters;
 
 use GrandMedia\DoctrineLogging\Formatters\Exceptions\UnsupportedValue;
 
-final class DateTimeFormatter implements \GrandMedia\DoctrineLogging\ValueFormatter
+final class DateTimeFormatter implements \GrandMedia\DoctrineLogging\Formatters\Formatter
 {
 
 	/**
