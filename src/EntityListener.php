@@ -162,7 +162,7 @@ final class EntityListener
 			}
 		}
 
-		return (string) $value;
+		return \is_object($value) && !\method_exists($value, '__toString') ? \serialize($value) : (string) $value;
 	}
 
 }
