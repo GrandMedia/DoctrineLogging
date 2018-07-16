@@ -42,7 +42,7 @@ final class FileSystemJSONLogger implements \GrandMedia\DoctrineLogging\Loggers\
 		$file = $this->getLogFile($log->getCreatedAt());
 
 		FileSystem::createDir(\dirname($file));
-		if (@file_put_contents($file, Json::encode($data) . \PHP_EOL) === false) {
+		if (@file_put_contents($file, Json::encode($data) . \PHP_EOL, \FILE_APPEND | \LOCK_EX) === false) {
 			throw new IOException(\sprintf('Unable to write file \'%s\'.', $file));
 		}
 	}
