@@ -67,6 +67,7 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension
 					[
 						Events::postPersist,
 						Events::postUpdate,
+						Events::preRemove,
 						Events::postRemove,
 					],
 					$builder->getByType(EntityListener::class),
