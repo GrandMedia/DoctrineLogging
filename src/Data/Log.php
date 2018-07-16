@@ -1,16 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace GrandMedia\DoctrineLogging;
+namespace GrandMedia\DoctrineLogging\Data;
 
 use Assert\Assertion;
 
 class Log
 {
-
-	/**
-	 * @var int
-	 */
-	private $id;
 
 	/**
 	 * @var string
@@ -28,49 +23,45 @@ class Log
 	private $entityId;
 
 	/**
-	 * @var int
+	 * @var \GrandMedia\DoctrineLogging\Data\Action
 	 */
 	private $action;
 
 	/**
-	 * @var string
+	 * @var \GrandMedia\DoctrineLogging\Data\ChangeSet
 	 */
-	private $message;
+	private $changeSet;
 
 	/**
 	 * @var \DateTimeImmutable
 	 */
 	private $createdAt;
 
-	public function __construct(
+	private function __construct()
+	{
+	}
+
+	public static function fromValues(
 		string $userId,
 		string $entityClass,
 		string $entityId,
 		Action $action,
-		string $message,
+		ChangeSet $changeSet,
 		\DateTimeImmutable $createdAt
-	)
+	): self
 	{
 		Assertion::notBlank($entityClass);
 		Assertion::notBlank($entityId);
-		Assertion::notBlank($message);
 
-		$this->userId = $userId;
-		$this->entityClass = $entityClass;
-		$this->entityId = $entityId;
-		$this->action = $action->getValue();
-		$this->message = $message;
-		$this->createdAt = $createdAt;
-	}
+		$log = new self();
+		$log->userId = $userId;
+		$log->entityClass = $entityClass;
+		$log->entityId = $entityId;
+		$log->action = $action;
+		$log->changeSet = $changeSet;
+		$log->createdAt = $createdAt;
 
-	public function getId(): int
-	{
-		return $this->id;
-	}
-
-	public function getCreatedAt(): \DateTimeImmutable
-	{
-		return $this->createdAt;
+		return $log;
 	}
 
 	public function getUserId(): string
@@ -90,12 +81,17 @@ class Log
 
 	public function getAction(): Action
 	{
-		return Action::get($this->action);
+		return $this->action;
 	}
 
-	public function getMessage(): string
+	public function getChangeSet(): ChangeSet
 	{
-		return $this->message;
+		return $this->changeSet;
+	}
+
+	public function getCreatedAt(): \DateTimeImmutable
+	{
+		return $this->createdAt;
 	}
 
 }

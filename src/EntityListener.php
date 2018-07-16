@@ -2,65 +2,79 @@
 
 namespace GrandMedia\DoctrineLogging;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Util\ClassUtils;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PostFlushEventArgs;
+use GrandMedia\DoctrineLogging\Data\Action;
+use GrandMedia\DoctrineLogging\Data\Change;
+use GrandMedia\DoctrineLogging\Data\ChangeSet;
+use GrandMedia\DoctrineLogging\Data\Log;
 use GrandMedia\DoctrineLogging\DateTime\DateTimeProvider;
 use GrandMedia\DoctrineLogging\Formatters\Formatter;
+use GrandMedia\DoctrineLogging\Loggers\Logger;
 use GrandMedia\DoctrineLogging\Security\IdentityProvider;
 use Nette\Security\IIdentity;
 
 final class EntityListener
 {
 
-	/** @var \GrandMedia\DoctrineLogging\Security\IdentityProvider */
+	/**
+	 * @var \GrandMedia\DoctrineLogging\Loggers\Logger
+	 */
+	private $logger;
+
+	/**
+	 * @var \GrandMedia\DoctrineLogging\Security\IdentityProvider
+	 */
 	private $identityProvider;
 
-	/** @var \GrandMedia\DoctrineLogging\DateTime\DateTimeProvider */
+	/**
+	 * @var \GrandMedia\DoctrineLogging\DateTime\DateTimeProvider
+	 */
 	private $dateTimeProvider;
 
-	/** @var \GrandMedia\DoctrineLogging\Log[] */
-	private $logsToPersist = [];
-
-	/** @var \GrandMedia\DoctrineLogging\Formatters\Formatter[] */
+	/**
+	 * @var \GrandMedia\DoctrineLogging\Formatters\Formatter[]
+	 */
 	private $valueFormatters = [];
 
-	public function __construct(IdentityProvider $identityProvider, DateTimeProvider $dateTimeProvider)
+	/**
+	 * @var \GrandMedia\DoctrineLogging\Data\Log[]
+	 */
+	private $deleteLogs = [];
+
+	public function __construct(Logger $logger, IdentityProvider $identityProvider, DateTimeProvider $dateTimeProvider)
 	{
+		$this->logger = $logger;
 		$this->identityProvider = $identityProvider;
 		$this->dateTimeProvider = $dateTimeProvider;
 	}
 
 	public function postPersist(LifecycleEventArgs $eventArgs): void
 	{
-		$this->logAction($eventArgs, Action::get(Action::CREATE), $this->createMessage($eventArgs));
+		$this->logger->log($this->createLog($eventArgs, Action::create()));
 	}
 
 	public function postUpdate(LifecycleEventArgs $eventArgs): void
 	{
-		$message = $this->createMessage($eventArgs);
-		if ($message !== '') {
-			$this->logAction($eventArgs, Action::get(Action::UPDATE), $message);
+		$log = $this->createLog($eventArgs, Action::update());
+
+		if (!$log->getChangeSet()->isEmpty()) {
+			$this->logger->log($log);
 		}
 	}
 
 	public function preRemove(LifecycleEventArgs $eventArgs): void
 	{
-		$this->logAction($eventArgs, Action::get(Action::DELETE), 'success');
+		$key = spl_object_hash($eventArgs->getEntity());
+		$this->deleteLogs[$key] = $this->createLog($eventArgs, Action::delete());
 	}
 
-	public function postFlush(PostFlushEventArgs $eventArgs): void
+	public function postRemove(LifecycleEventArgs $eventArgs): void
 	{
-		if (\count($this->logsToPersist)) {
-			$em = $eventArgs->getEntityManager();
-			$em->clear();
-			foreach ($this->logsToPersist as $log) {
-				$em->persist($log);
-			}
-
-			$this->logsToPersist = [];
-			$em->flush();
+		$key = spl_object_hash($eventArgs->getEntity());
+		if (isset($this->deleteLogs[$key])) {
+			$this->logger->log($this->deleteLogs[$key]);
 		}
 	}
 
@@ -69,41 +83,48 @@ final class EntityListener
 		$this->valueFormatters[] = $formatter;
 	}
 
-	private function logAction(LifecycleEventArgs $eventArgs, Action $action, string $message): void
+	private function createLog(LifecycleEventArgs $eventArgs, Action $action): Log
 	{
 		$identity = $this->identityProvider->getIdentity();
 		$entity = $eventArgs->getEntity();
 
-		if ($entity instanceof Log) {
-			return;
-		}
-
-		$this->logsToPersist[] = new Log(
+		return Log::fromValues(
 			$identity instanceof IIdentity ? $this->formatValue($identity->getId()) : '',
-			$this->getEntityClass($entity),
+			\get_class($entity),
 			$this->getEntityId($entity, $eventArgs->getEntityManager()),
 			$action,
-			$message,
+			$this->getChangeSet($eventArgs, $action),
 			$this->dateTimeProvider->getDateTime()
 		);
 	}
 
-	private function createMessage(LifecycleEventArgs $eventArgs): string
+	private function getChangeSet(LifecycleEventArgs $eventArgs, Action $action): ChangeSet
 	{
 		$em = $eventArgs->getEntityManager();
 		$uow = $em->getUnitOfWork();
 		$entity = $eventArgs->getEntity();
 		$classMetadata = $em->getClassMetadata(\get_class($entity));
-		$uow->computeChangeSet($classMetadata, $entity);
 
-		$message = [];
-		foreach ($uow->getEntityChangeSet($entity) as $property => $changeSet) {
+		if ($action->isUpdate()) {
+			$changeData = $uow->getEntityChangeSet($entity);
+		} else {
+			$changeData = $uow->getOriginalEntityData($entity);
+			\array_walk(
+				$changeData,
+				function (&$value) use ($action): void {
+					$value = $action->isCreate() ? ['', $value] : [$value, ''];
+				}
+			);
+		}
+
+		$changeSet = ChangeSet::empty();
+		foreach ($changeData as $property => $data) {
 			if (isset($classMetadata->embeddedClasses[$property])) {
 				continue;
 			}
 
-			/** @var mixed[] $changeSet */
-			foreach ($changeSet as &$change) {
+			/** @var mixed[] $data */
+			foreach ($data as &$change) {
 				if (
 					\is_object($change) &&
 					!$em->getMetadataFactory()->isTransient(ClassUtils::getClass($change))
@@ -116,23 +137,18 @@ final class EntityListener
 			}
 			unset($change);
 
-			if ((string) $changeSet[0] !== (string) $changeSet[1]) {
-				$message[] = \sprintf(
-					'property "%s" changed from "%s" to "%s"',
-					$property,
-					\trim((string) \preg_replace('/\s\s+/', ' ', $changeSet[0])),
-					\trim((string) \preg_replace('/\s\s+/', ' ', $changeSet[1]))
-				);
+			if ($data[0] !== $data[1]) {
+				$changeSet->add($property, Change::fromValues($data[0], $data[1]));
 			}
 		}
 
-		return \implode('\n', $message);
+		return $changeSet;
 	}
 
 	/**
 	 * @param object $entity
 	 */
-	private function getEntityId($entity, EntityManager $em): string
+	private function getEntityId($entity, ObjectManager $em): string
 	{
 		$identifierValues = $em->getClassMetadata(ClassUtils::getClass($entity))->getIdentifierValues($entity);
 
@@ -142,16 +158,6 @@ final class EntityListener
 		unset($identifierValue);
 
 		return \implode(',', $identifierValues);
-	}
-
-	/**
-	 * @param object $entity
-	 */
-	private function getEntityClass($entity): string
-	{
-		$parts = \explode('\\', \get_class($entity));
-
-		return $parts[\count($parts) - 1];
 	}
 
 	/**

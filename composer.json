@@ -25,7 +25,8 @@
 		"kdyby/doctrine": "@dev",
 		"nette/bootstrap": "^2.4",
 		"nette/reflection": "^2.4",
-		"nette/tester": "^2.0"
+		"nette/tester": "^2.0",
+		"mockery/mockery": "^1.1"
 	},
 	"autoload": {
 		"psr-4": {

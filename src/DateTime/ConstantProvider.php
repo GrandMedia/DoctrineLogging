@@ -10,9 +10,24 @@ final class ConstantProvider implements \GrandMedia\DoctrineLogging\DateTime\Dat
 	 */
 	private $dateTime;
 
-	public function __construct()
+	private function __construct()
 	{
-		$this->dateTime = new \DateTimeImmutable();
+	}
+
+	public static function now(): self
+	{
+		$provider = new self();
+		$provider->dateTime = new \DateTimeImmutable();
+
+		return $provider;
+	}
+
+	public static function fromDateTime(\DateTimeImmutable $dateTime): self
+	{
+		$provider = new self();
+		$provider->dateTime = $dateTime;
+
+		return $provider;
 	}
 
 	public function getDateTime(): \DateTimeImmutable

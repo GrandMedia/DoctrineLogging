@@ -33,7 +33,7 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension
 			->setType(BasicIdentityProvider::class);
 
 		$containerBuilder->addDefinition($this->prefix('dateTimeProvider'))
-			->setType(ConstantProvider::class);
+			->setFactory(ConstantProvider::class . '::now');
 
 		$entityListenerDefinition = $containerBuilder->addDefinition($this->prefix('entityListener'))
 			->setType(EntityListener::class);
@@ -67,8 +67,7 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension
 					[
 						Events::postPersist,
 						Events::postUpdate,
-						Events::preRemove,
-						Events::postFlush,
+						Events::postRemove,
 					],
 					$builder->getByType(EntityListener::class),
 				]
