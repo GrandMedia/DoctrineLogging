@@ -14,7 +14,7 @@
 	},
 	"require": {
 		"php": ">=7.1",
-		"beberlei/assert": "^2.7",
+		"beberlei/assert": "^3.0",
 		"consistence/consistence": "^1.0",
 		"doctrine/orm": "^2.6",
 		"nette/di": "^2.4",
