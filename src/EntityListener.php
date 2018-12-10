@@ -119,7 +119,10 @@ final class EntityListener
 
 		$changeSet = ChangeSet::empty();
 		foreach ($changeData as $property => $data) {
-			if (isset($classMetadata->embeddedClasses[$property])) {
+			if (
+				isset($classMetadata->embeddedClasses[$property]) ||
+				isset($classMetadata->associationMappings[$property])
+			) {
 				continue;
 			}
 
