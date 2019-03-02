@@ -2,7 +2,7 @@
 
 namespace GrandMedia\DoctrineLogging\DI;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 use GrandMedia\DoctrineLogging\DateTime\ConstantProvider;
 use GrandMedia\DoctrineLogging\EntityListener;
@@ -63,7 +63,7 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension
 			->addBody(
 				'$this->getService(?)->getEventManager()->addEventListener(?, $this->getService(?));',
 				[
-					$builder->getByType(EntityManager::class),
+					$builder->getByType(EntityManagerInterface::class),
 					[
 						Events::postPersist,
 						Events::postUpdate,
