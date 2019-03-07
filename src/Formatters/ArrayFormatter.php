@@ -3,6 +3,7 @@
 namespace GrandMedia\DoctrineLogging\Formatters;
 
 use GrandMedia\DoctrineLogging\Formatters\Exceptions\UnsupportedValue;
+use Nette\Utils\Json;
 
 final class ArrayFormatter implements \GrandMedia\DoctrineLogging\Formatters\Formatter
 {
@@ -21,7 +22,7 @@ final class ArrayFormatter implements \GrandMedia\DoctrineLogging\Formatters\For
 	public function format($value): string
 	{
 		if (\is_array($value)) {
-			return \implode(', ', $value);
+			return Json::encode($value);
 		}
 
 		throw new UnsupportedValue();
