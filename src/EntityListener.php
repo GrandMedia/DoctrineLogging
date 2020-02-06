@@ -147,10 +147,8 @@ final class EntityListener
 		return $changeSet;
 	}
 
-	/**
-	 * @param object $entity
-	 */
-	private function getEntityId($entity, ObjectManager $em): string
+
+	private function getEntityId(object $entity, ObjectManager $em): string
 	{
 		$identifierValues = $em->getClassMetadata(ClassUtils::getClass($entity))->getIdentifierValues($entity);
 
