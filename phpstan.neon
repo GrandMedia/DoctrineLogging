@@ -1,3 +1,4 @@
 parameters:
 	excludes_analyse:
 		- %currentWorkingDirectory%/tests/tmp/*
+		- %currentWorkingDirectory%/tests/DoctrineLogging/Mocks/EntityManagerMock

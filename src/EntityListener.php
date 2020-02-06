@@ -126,7 +126,6 @@ final class EntityListener
 				continue;
 			}
 
-			/** @var mixed[] $data */
 			foreach ($data as &$change) {
 				if (
 					\is_object($change) &&
