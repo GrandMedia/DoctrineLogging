@@ -3,14 +3,8 @@ php:
 
 extensions:
 	- GrandMedia\DoctrineLogging\DI\DoctrineLoggingExtension
-	- Kdyby\Annotations\DI\AnnotationsExtension
-	- Kdyby\Console\DI\ConsoleExtension
-	doctrine: Kdyby\Doctrine\DI\OrmExtension
 
 services:
+	- GrandMediaTests\DoctrineLogging\Mocks\EntityManagerMock
 	security.userStorage: GrandMediaTests\DoctrineLogging\Mocks\UserStorageMock
 	- GrandMediaTests\DoctrineLogging\Mocks\LoggerMock
-
-doctrine:
-	driver: pdo_sqlite
-	memory: true
