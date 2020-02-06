@@ -13,7 +13,7 @@
 		"issues": "https://github.com/GrandMedia/Menus/issues"
 	},
 	"require": {
-		"php": ">=7.1",
+		"php": ">=7.2",
 		"beberlei/assert": "^3.0",
 		"consistence/consistence": "^1.0",
 		"doctrine/orm": "^2.6",
