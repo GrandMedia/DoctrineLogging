@@ -15,7 +15,9 @@ use Nette\PhpGenerator\ClassType;
 final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension
 {
 
-	/** @var mixed[] */
+	/**
+	 * @var mixed[]
+	 */
 	public $defaults = [
 		'formatters' => [
 			'datetime' => true,

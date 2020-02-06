@@ -8,7 +8,9 @@ use Nette\Security\IUserStorage;
 final class BasicIdentityProvider implements \GrandMedia\DoctrineLogging\Security\IdentityProvider
 {
 
-	/** @var \Nette\Security\IUserStorage */
+	/**
+	 * @var \Nette\Security\IUserStorage
+	 */
 	private $userStorage;
 
 	public function __construct(IUserStorage $userStorage)

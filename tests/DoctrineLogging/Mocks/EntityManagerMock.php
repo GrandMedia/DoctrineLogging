@@ -3,16 +3,16 @@
 namespace GrandMediaTests\DoctrineLogging\Mocks;
 
 use Doctrine\Common\EventManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 
-
-final class EntityManagerMock implements EntityManagerInterface
+final class EntityManagerMock implements \Doctrine\ORM\EntityManagerInterface
 {
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getClassMetadata($className)
 	{
-
 	}
 
 	/**
@@ -20,7 +20,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getCache()
 	{
-
 	}
 
 	/**
@@ -28,7 +27,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getConnection()
 	{
-
 	}
 
 	/**
@@ -36,7 +34,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getExpressionBuilder()
 	{
-
 	}
 
 	/**
@@ -44,7 +41,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function beginTransaction()
 	{
-
 	}
 
 	/**
@@ -52,7 +48,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function transactional($func)
 	{
-
 	}
 
 	/**
@@ -60,7 +55,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function commit()
 	{
-
 	}
 
 	/**
@@ -68,7 +62,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function rollback()
 	{
-
 	}
 
 	/**
@@ -76,7 +69,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function createQuery($dql = '')
 	{
-
 	}
 
 	/**
@@ -84,7 +76,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function createNamedQuery($name)
 	{
-
 	}
 
 	/**
@@ -92,7 +83,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function createNativeQuery($sql, ResultSetMapping $rsm)
 	{
-
 	}
 
 	/**
@@ -100,7 +90,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function createNamedNativeQuery($name)
 	{
-
 	}
 
 	/**
@@ -108,7 +97,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function createQueryBuilder()
 	{
-
 	}
 
 	/**
@@ -116,7 +104,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getReference($entityName, $id)
 	{
-
 	}
 
 	/**
@@ -124,7 +111,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getPartialReference($entityName, $identifier)
 	{
-
 	}
 
 	/**
@@ -132,7 +118,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function close()
 	{
-
 	}
 
 	/**
@@ -140,7 +125,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function copy($entity, $deep = false)
 	{
-
 	}
 
 	/**
@@ -148,7 +132,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function lock($entity, $lockMode, $lockVersion = null)
 	{
-
 	}
 
 	/**
@@ -164,7 +147,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getConfiguration()
 	{
-
 	}
 
 	/**
@@ -172,7 +154,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function isOpen()
 	{
-
 	}
 
 	/**
@@ -180,7 +161,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getUnitOfWork()
 	{
-
 	}
 
 	/**
@@ -188,7 +168,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getHydrator($hydrationMode)
 	{
-
 	}
 
 	/**
@@ -196,7 +175,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function newHydrator($hydrationMode)
 	{
-
 	}
 
 	/**
@@ -204,7 +182,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getProxyFactory()
 	{
-
 	}
 
 	/**
@@ -212,7 +189,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getFilters()
 	{
-
 	}
 
 	/**
@@ -220,7 +196,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function isFiltersStateClean()
 	{
-
 	}
 
 	/**
@@ -228,7 +203,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function hasFilters()
 	{
-
 	}
 
 	/**
@@ -236,7 +210,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function find($className, $id)
 	{
-
 	}
 
 	/**
@@ -244,7 +217,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function persist($object)
 	{
-
 	}
 
 	/**
@@ -252,7 +224,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function remove($object)
 	{
-
 	}
 
 	/**
@@ -260,7 +231,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function merge($object)
 	{
-
 	}
 
 	/**
@@ -268,7 +238,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function clear($objectName = null)
 	{
-
 	}
 
 	/**
@@ -276,7 +245,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function detach($object)
 	{
-
 	}
 
 	/**
@@ -284,7 +252,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function refresh($object)
 	{
-
 	}
 
 	/**
@@ -292,7 +259,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function flush()
 	{
-
 	}
 
 	/**
@@ -300,7 +266,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getRepository($className)
 	{
-
 	}
 
 	/**
@@ -308,7 +273,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function getMetadataFactory()
 	{
-
 	}
 
 	/**
@@ -316,7 +280,6 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function initializeObject($obj)
 	{
-
 	}
 
 	/**
@@ -324,11 +287,14 @@ final class EntityManagerMock implements EntityManagerInterface
 	 */
 	public function contains($object)
 	{
-
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	public function __call($name, $arguments)
 	{
 		// TODO: Implement @method Mapping\ClassMetadata getClassMetadata($className)
 	}
+
 }
