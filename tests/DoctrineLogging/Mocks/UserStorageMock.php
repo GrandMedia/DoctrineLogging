@@ -7,11 +7,7 @@ use Nette\Security\IIdentity;
 final class UserStorageMock implements \Nette\Security\IUserStorage
 {
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param bool $state
-	 */
-	public function setAuthenticated($state): self
+	public function setAuthenticated(bool $state): self
 	{
 		return $this;
 	}
@@ -31,12 +27,7 @@ final class UserStorageMock implements \Nette\Security\IUserStorage
 		return null;
 	}
 
-	/**
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 * @param string|int|\DateTimeInterface $time
-	 * @param int $flags
-	 */
-	public function setExpiration($time, $flags = 0): self
+	public function setExpiration(?string $time, int $flags = 0): self
 	{
 		return $this;
 	}
