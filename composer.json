@@ -23,7 +23,6 @@
 	"require-dev": {
 		"grand-media/coding-standard": "^3.1",
 		"nette/bootstrap": "^3.0",
-		"nette/reflection": "^2.4",
 		"nette/tester": "^2.0",
 		"phpstan/phpstan": "^0.12",
 		"mockery/mockery": "^1.1"
