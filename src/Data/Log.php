@@ -7,35 +7,12 @@ use Assert\Assertion;
 class Log
 {
 
-	/**
-	 * @var string
-	 */
-	private $userId;
-
-	/**
-	 * @var string
-	 */
-	private $entityClass;
-
-	/**
-	 * @var string
-	 */
-	private $entityId;
-
-	/**
-	 * @var \GrandMedia\DoctrineLogging\Data\Action
-	 */
-	private $action;
-
-	/**
-	 * @var \GrandMedia\DoctrineLogging\Data\ChangeSet
-	 */
-	private $changeSet;
-
-	/**
-	 * @var \DateTimeImmutable
-	 */
-	private $createdAt;
+	private string $userId;
+	private string $entityClass;
+	private string $entityId;
+	private Action $action;
+	private ChangeSet $changeSet;
+	private \DateTimeImmutable $createdAt;
 
 	private function __construct()
 	{

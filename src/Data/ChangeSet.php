@@ -5,10 +5,8 @@ namespace GrandMedia\DoctrineLogging\Data;
 final class ChangeSet
 {
 
-	/**
-	 * @var \GrandMedia\DoctrineLogging\Data\Change[]
-	 */
-	private $changes = [];
+	/** @var \GrandMedia\DoctrineLogging\Data\Change[] */
+	private array $changes = [];
 
 	private function __construct()
 	{

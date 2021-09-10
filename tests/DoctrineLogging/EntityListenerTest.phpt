@@ -2,10 +2,10 @@
 
 namespace GrandMediaTests\DoctrineLogging;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\UnitOfWork;
+use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\ObjectManager;
 use GrandMedia\DoctrineLogging\Data\Action;
 use GrandMedia\DoctrineLogging\DateTime\ConstantProvider;
 use GrandMedia\DoctrineLogging\EntityListener;
@@ -30,20 +30,14 @@ final class EntityListenerTest extends \Tester\TestCase
 	private const USER_ROLE_ADMIN = 'admin';
 	private const USER_ROLE_USER = 'user';
 
-	/**
-	 * @var \GrandMediaTests\DoctrineLogging\Mocks\LoggerMock
-	 */
-	private $logger;
+	private LoggerMock $logger;
 
-	/**
-	 * @var \DateTimeImmutable
-	 */
-	private $dateTime;
+	private \DateTimeImmutable $dateTime;
 
 	public function testPersist(): void
 	{
 		$entityListener = $this->createEntityListener();
-		/** @var \Doctrine\Common\Persistence\ObjectManager $objectManager */
+		/** @var \Doctrine\Persistence\ObjectManager $objectManager */
 		$objectManager = $this->createObjectManager(
 			[
 				'id' => self::USER_ID,
@@ -70,7 +64,7 @@ final class EntityListenerTest extends \Tester\TestCase
 	public function testUpdate(): void
 	{
 		$entityListener = $this->createEntityListener();
-		/** @var \Doctrine\Common\Persistence\ObjectManager $objectManager */
+		/** @var \Doctrine\Persistence\ObjectManager $objectManager */
 		$objectManager = $this->createObjectManager(
 			[
 				'name' => [self::USER_NAME, self::USER_NAME],
@@ -94,7 +88,7 @@ final class EntityListenerTest extends \Tester\TestCase
 	public function testRemove(): void
 	{
 		$entityListener = $this->createEntityListener();
-		/** @var \Doctrine\Common\Persistence\ObjectManager $objectManager */
+		/** @var \Doctrine\Persistence\ObjectManager $objectManager */
 		$objectManager = $this->createObjectManager(
 			[
 				'id' => self::USER_ID,

@@ -7,15 +7,8 @@ use Assert\Assertion;
 final class Change
 {
 
-	/**
-	 * @var string
-	 */
-	private $from;
-
-	/**
-	 * @var string
-	 */
-	private $to;
+	private string $from;
+	private string $to;
 
 	private function __construct()
 	{

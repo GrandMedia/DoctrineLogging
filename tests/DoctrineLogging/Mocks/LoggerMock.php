@@ -7,10 +7,8 @@ use GrandMedia\DoctrineLogging\Data\Log;
 final class LoggerMock implements \GrandMedia\DoctrineLogging\Loggers\Logger
 {
 
-	/**
-	 * @var \GrandMedia\DoctrineLogging\Data\Log[]
-	 */
-	private $logs = [];
+	/** @var \GrandMedia\DoctrineLogging\Data\Log[] */
+	private array $logs = [];
 
 	public function log(Log $log): void
 	{

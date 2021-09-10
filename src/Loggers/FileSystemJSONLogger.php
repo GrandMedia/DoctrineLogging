@@ -10,10 +10,7 @@ use Nette\Utils\Json;
 final class FileSystemJSONLogger implements \GrandMedia\DoctrineLogging\Loggers\Logger
 {
 
-	/**
-	 * @var string
-	 */
-	private $directory;
+	private string $directory;
 
 	public function __construct(string $directory)
 	{

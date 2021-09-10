@@ -13,15 +13,15 @@
 		"issues": "https://github.com/GrandMedia/Menus/issues"
 	},
 	"require": {
-		"php": ">=7.2",
+		"php": ">=7.4",
 		"beberlei/assert": "^3.0",
 		"consistence/consistence": "^2.0",
-		"doctrine/orm": "^2.6",
+		"doctrine/orm": "^2.9",
 		"nette/di": "^3.0",
-		"nette/security": "^3.0"
+		"nette/security": "^3.1"
 	},
 	"require-dev": {
-		"grand-media/coding-standard": "^2.0",
+		"grand-media/coding-standard": "^3.1",
 		"nette/bootstrap": "^3.0",
 		"nette/reflection": "^2.4",
 		"nette/tester": "^2.0",

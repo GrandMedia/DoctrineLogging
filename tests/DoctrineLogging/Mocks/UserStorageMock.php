@@ -4,37 +4,27 @@ namespace GrandMediaTests\DoctrineLogging\Mocks;
 
 use Nette\Security\IIdentity;
 
-final class UserStorageMock implements \Nette\Security\IUserStorage
+final class UserStorageMock implements \Nette\Security\UserStorage
 {
 
-	public function setAuthenticated(bool $state): self
+	public function saveAuthentication(IIdentity $identity): void
 	{
-		return $this;
 	}
 
-	public function isAuthenticated(): bool
+	public function clearAuthentication(bool $clearIdentity): void
 	{
-		return false;
 	}
 
-	public function setIdentity(?IIdentity $identity = null): self
+	/**
+	 * @return array{bool, ?\Nette\Security\IIdentity, ?int}
+	 */
+	public function getState(): array
 	{
-		return $this;
+		return [false, null, null];
 	}
 
-	public function getIdentity(): ?IIdentity
+	public function setExpiration(?string $expire, bool $clearIdentity): void
 	{
-		return null;
-	}
-
-	public function setExpiration(?string $time, int $flags = 0): self
-	{
-		return $this;
-	}
-
-	public function getLogoutReason(): ?int
-	{
-		return null;
 	}
 
 }

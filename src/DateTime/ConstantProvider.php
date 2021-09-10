@@ -5,10 +5,7 @@ namespace GrandMedia\DoctrineLogging\DateTime;
 final class ConstantProvider implements \GrandMedia\DoctrineLogging\DateTime\DateTimeProvider
 {
 
-	/**
-	 * @var \DateTimeImmutable
-	 */
-	private $dateTime;
+	private \DateTimeImmutable $dateTime;
 
 	private function __construct()
 	{

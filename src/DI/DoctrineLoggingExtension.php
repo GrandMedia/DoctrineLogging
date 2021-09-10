@@ -11,24 +11,32 @@ use GrandMedia\DoctrineLogging\Formatters\DateTimeFormatter;
 use GrandMedia\DoctrineLogging\Formatters\EnumFormatter;
 use GrandMedia\DoctrineLogging\Security\BasicIdentityProvider;
 use Nette\PhpGenerator\ClassType;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 
+/**
+ * @property-read \stdClass $config
+ */
 final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension
 {
 
-	/**
-	 * @var mixed[]
-	 */
-	public $defaults = [
-		'formatters' => [
-			'datetime' => true,
-			'enum' => true,
-			'array' => true,
-		],
-	];
+	public function getConfigSchema(): Schema
+	{
+		return Expect::structure(
+			[
+				'formatters' => Expect::structure(
+					[
+						'datetime' => Expect::bool(true),
+						'enum' => Expect::bool(true),
+						'array' => Expect::bool(true),
+					]
+				),
+			]
+		);
+	}
 
 	public function loadConfiguration(): void
 	{
-		$config = $this->validateConfig($this->defaults);
 		$containerBuilder = $this->getContainerBuilder();
 
 		$containerBuilder->addDefinition($this->prefix('identityProvider'))
@@ -40,17 +48,17 @@ final class DoctrineLoggingExtension extends \Nette\DI\CompilerExtension
 		$entityListenerDefinition = $containerBuilder->addDefinition($this->prefix('entityListener'))
 			->setType(EntityListener::class);
 
-		if ($config['formatters']['datetime']) {
+		if ($this->config->formatters->datetime) {
 			$containerBuilder->addDefinition($this->prefix('dateTimeFormatter'))
 				->setType(DateTimeFormatter::class);
 			$entityListenerDefinition->addSetup('addValueFormatter', [$this->prefix('@dateTimeFormatter')]);
 		}
-		if ($config['formatters']['enum']) {
+		if ($this->config->formatters->enum) {
 			$containerBuilder->addDefinition($this->prefix('enumFormatter'))
 				->setType(EnumFormatter::class);
 			$entityListenerDefinition->addSetup('addValueFormatter', [$this->prefix('@enumFormatter')]);
 		}
-		if ($config['formatters']['array']) {
+		if ($this->config->formatters->array) {
 			$containerBuilder->addDefinition($this->prefix('arrayFormatter'))
 				->setType(ArrayFormatter::class);
 			$entityListenerDefinition->addSetup('addValueFormatter', [$this->prefix('@arrayFormatter')]);

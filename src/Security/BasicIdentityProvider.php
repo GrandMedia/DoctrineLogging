@@ -3,24 +3,23 @@
 namespace GrandMedia\DoctrineLogging\Security;
 
 use Nette\Security\IIdentity;
-use Nette\Security\IUserStorage;
+use Nette\Security\UserStorage;
 
 final class BasicIdentityProvider implements \GrandMedia\DoctrineLogging\Security\IdentityProvider
 {
 
-	/**
-	 * @var \Nette\Security\IUserStorage
-	 */
-	private $userStorage;
+	private UserStorage $userStorage;
 
-	public function __construct(IUserStorage $userStorage)
+	public function __construct(UserStorage $userStorage)
 	{
 		$this->userStorage = $userStorage;
 	}
 
 	public function getIdentity(): ?IIdentity
 	{
-		return $this->userStorage->isAuthenticated() ? $this->userStorage->getIdentity() : null;
+		[$authenticated, $identity, $reason] = $this->userStorage->getState();
+
+		return $authenticated ? $identity : null;
 	}
 
 }

@@ -5,20 +5,9 @@ namespace GrandMediaTests\DoctrineLogging\Entities;
 final class User
 {
 
-	/**
-	 * @var int
-	 */
-	private $id;
-
-	/**
-	 * @var string
-	 */
-	private $name;
-
-	/**
-	 * @var string
-	 */
-	private $role;
+	private int $id;
+	private string $name;
+	private string $role;
 
 	public function __construct(int $id, string $name, string $role)
 	{

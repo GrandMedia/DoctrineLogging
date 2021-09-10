@@ -7,4 +7,5 @@ extensions:
 services:
 	- GrandMediaTests\DoctrineLogging\Mocks\EntityManagerMock
 	security.userStorage: GrandMediaTests\DoctrineLogging\Mocks\UserStorageMock
+	security.legacyUserStorage: GrandMediaTests\DoctrineLogging\Mocks\LegacyUserStorageMock
 	- GrandMediaTests\DoctrineLogging\Mocks\LoggerMock

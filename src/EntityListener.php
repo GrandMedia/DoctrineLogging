@@ -2,9 +2,9 @@
 
 namespace GrandMedia\DoctrineLogging;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Persistence\ObjectManager;
 use GrandMedia\DoctrineLogging\Data\Action;
 use GrandMedia\DoctrineLogging\Data\Change;
 use GrandMedia\DoctrineLogging\Data\ChangeSet;
@@ -18,30 +18,13 @@ use Nette\Security\IIdentity;
 final class EntityListener
 {
 
-	/**
-	 * @var \GrandMedia\DoctrineLogging\Loggers\Logger
-	 */
-	private $logger;
-
-	/**
-	 * @var \GrandMedia\DoctrineLogging\Security\IdentityProvider
-	 */
-	private $identityProvider;
-
-	/**
-	 * @var \GrandMedia\DoctrineLogging\DateTime\DateTimeProvider
-	 */
-	private $dateTimeProvider;
-
-	/**
-	 * @var \GrandMedia\DoctrineLogging\Formatters\Formatter[]
-	 */
-	private $valueFormatters = [];
-
-	/**
-	 * @var \GrandMedia\DoctrineLogging\Data\Log[]
-	 */
-	private $deleteLogs = [];
+	private Logger $logger;
+	private IdentityProvider $identityProvider;
+	private DateTimeProvider $dateTimeProvider;
+	/** @var \GrandMedia\DoctrineLogging\Formatters\Formatter[] */
+	private array $valueFormatters = [];
+	/** @var \GrandMedia\DoctrineLogging\Data\Log[] */
+	private array $deleteLogs = [];
 
 	public function __construct(Logger $logger, IdentityProvider $identityProvider, DateTimeProvider $dateTimeProvider)
 	{
@@ -111,7 +94,7 @@ final class EntityListener
 			$changeData = $uow->getOriginalEntityData($entity);
 			\array_walk(
 				$changeData,
-				function (&$value) use ($action): void {
+				static function (&$value) use ($action): void {
 					$value = $action->isCreate() ? ['', $value] : [$value, ''];
 				}
 			);
